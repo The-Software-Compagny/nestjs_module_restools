@@ -13,7 +13,7 @@ export class TestPublicController {
     }
   }
 
-  @Get('private')
+  @Post('private')
   public privateInPublicWay(): object {
     return {
       statusCode: HttpStatus.OK,

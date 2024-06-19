@@ -41,6 +41,16 @@ describe('auth', () => {
   })
 
   it('test with bad guard and verify server error', async () => {
-    await request(app.getHttpServer()).get('/public/private').expect(HttpStatus.UNAUTHORIZED)
+    await request(app.getHttpServer()).post('/public/private').expect(HttpStatus.UNAUTHORIZED)
+  })
+
+  it('test with bad guard and verify server error', async () => {
+    await request(app.getHttpServer())
+      .post('/public/private')
+      .send({
+        username: 'test',
+        password: 'test',
+      })
+      .expect(HttpStatus.CREATED)
   })
 })
