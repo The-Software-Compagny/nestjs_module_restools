@@ -3,7 +3,18 @@
   "version": "0.0.2",
   "description": "Simple tools for NestJS framework and REST APIs",
   "repository": "https://github.com/The-Software-Compagny/nestjs_module_restools.git",
-  "author": "Tacx <12997062+tacxou@users.noreply.github.com>",
+  "author": "tacxou <12997062+tacxou@users.noreply.github.com> (https://github.com/tacxou)",
+  "contributors": [
+    {
+      "name": " tacxou",
+      "email": "12997062+tacxou@users.noreply.github.com",
+      "url": "https://github.com/tacxou"
+    },
+    {
+      "name": "Contributors",
+      "url": "https://github.com/The-Software-Compagny/nestjs_module_restools/graphs/contributors"
+    }
+  ],
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
