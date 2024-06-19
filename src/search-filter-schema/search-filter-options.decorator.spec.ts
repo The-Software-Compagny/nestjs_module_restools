@@ -1,6 +1,6 @@
 import { DEFAULT_FILTER_OPTIONS, filterOptions } from "./search-filter-options.decorator"
 
-describe('search-filter-options.decorator.ts', () => {
+describe('search-filter-options', () => {
   it('should work', () => {
     expect(true).toBe(true)
   })

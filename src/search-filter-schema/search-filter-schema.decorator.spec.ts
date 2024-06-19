@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { DEFAULT_SCHEMA_OPTIONS, filterSchema } from './search-filter-schema.decorator'
 
-describe('search-filter-schema.decorator.ts', () => {
+describe('search-filter-schema', () => {
   it('should work', () => {
     expect(true).toBe(true)
   })
