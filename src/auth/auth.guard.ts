@@ -1,14 +1,17 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable, Type, mixin } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AuthGuard as AuthGuardInternal } from '@nestjs/passport'
+import { AuthGuard as AuthGuardInternal, IAuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
-import { META_UNPROTECTED } from '../_decorators/public.decorator'
+import { META_UNPROTECTED } from './public.decorator'
+import { memoize } from '../_utils/memoize.util'
 
-export function AuthGuard(type?: string | string[]) {
+export const AuthGuard: (type?: string | string[]) => Type<IAuthGuard> = memoize(createAuthGuard)
+
+function createAuthGuard(type?: string | string[]): Type<IAuthGuard> {
   const AuthGuard = AuthGuardInternal(Array.isArray(type) ? type : [type])
 
   @Injectable()
-  class CustomAuthGuard extends AuthGuard implements CanActivate {
+  class MixinAuthGuard extends AuthGuard implements CanActivate {
     public constructor(public readonly reflector: Reflector) {
       super()
     }
@@ -22,5 +25,6 @@ export function AuthGuard(type?: string | string[]) {
     }
   }
 
-  return CustomAuthGuard
+  const guard = mixin(MixinAuthGuard)
+  return guard as Type<IAuthGuard>
 }
