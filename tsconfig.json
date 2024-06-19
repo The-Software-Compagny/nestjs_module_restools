@@ -1,26 +1,23 @@
 {
   "compilerOptions": {
-    "module": "CommonJS",
+    "module": "commonjs",
+    "types": ["node", "jest"],
+    "lib": ["es7"],
     "declaration": true,
     "removeComments": true,
-    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
+    "outDir": "dist",
+    "rootDir": "src",
+    "baseUrl": ".",
+    "noLib": false,
     "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "~/*": ["./src/*"],
-      "@/*": ["./*"]
-    }
-  }
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
