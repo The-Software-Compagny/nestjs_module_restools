@@ -1,22 +1,22 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { Request, Express } from 'express';
-import { EventEmitter2 } from '@nestjs/event-emitter';
-import { RequestContext } from 'nestjs-request-context';
+import { Request } from 'express';
+// import { EventEmitter2 } from '@nestjs/event-emitter';
+// import { RequestContext } from 'nestjs-request-context';
 
 export interface AbstractServiceContext {
   [key: string | number]: any
 
   moduleRef?: ModuleRef
-  req?: Request & { user?: Express.User }
-  eventEmitter?: EventEmitter2
+  req?: Request & { user?: any }
+  // eventEmitter?: EventEmitter2
 }
 
 @Injectable()
 export abstract class AbstractService {
   protected moduleRef?: ModuleRef
-  private readonly _req?: Request & { user?: Express.User }
-  protected eventEmitter?: EventEmitter2
+  private readonly _req?: Request & { user?: any }
+  // protected eventEmitter?: EventEmitter2
 
   protected logger: Logger
 
@@ -28,10 +28,10 @@ export abstract class AbstractService {
 
   protected get request():
     | (Request & {
-      user?: Express.User & any // eslint-disable-line
+      user?: any
     })
     | null {
-    return this._req || RequestContext.currentContext?.req;
+    return this._req/*  || RequestContext.currentContext?.req */;
   }
 
   public get moduleName(): string {
