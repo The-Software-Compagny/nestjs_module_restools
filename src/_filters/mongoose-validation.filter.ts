@@ -1,4 +1,4 @@
-import { Abstract, ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger, Type } from '@nestjs/common'
+import { Abstract, ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpExceptionBodyMessage, HttpStatus, Logger, Type } from '@nestjs/common'
 import { Request, Response } from 'express'
 import { Error } from 'mongoose'
 
@@ -25,7 +25,7 @@ export function MongooseValidationFilter<T = Type<any> | Abstract<any>>(exceptio
             message: exception['message'],
             validations: this.getValidationErrors(exception),
             ...debug,
-          },
+          } as unknown as HttpExceptionBodyMessage,
           exception.constructor.name,
           HttpStatus.NOT_ACCEPTABLE,
         ),
