@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "CommonJS",
     "types": ["node", "jest"],
     "lib": ["es7"],
     "declaration": true,
