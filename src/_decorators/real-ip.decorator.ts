@@ -1,4 +1,3 @@
-import { getClientIp } from 'request-ip'
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
 
 let getClientIp: (request: any) => string | null
