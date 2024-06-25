@@ -1,12 +1,26 @@
 import { Abstract, ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpExceptionBodyMessage, HttpStatus, Logger, Type } from '@nestjs/common'
 import { Request, Response } from 'express'
-import { Error } from 'mongoose'
+
+let Error
+(async () => {
+  try {
+    const mongooseModule = await import('mongoose')
+    Error = mongooseModule.Error
+  } catch (error) {
+    Logger.debug(`Mongoose module not found`, MongooseValidationFilter.name)
+  }
+})()
+
+type MongooseError = {
+  message: string
+  errors?: Record<string, { message: string; constraints?: Record<string, string>; property?: string }>
+  path?: string
+}
 
 export function MongooseValidationFilter<T = Type<any> | Abstract<any>>(exceptions?: Array<Type<any> | Abstract<any>>) {
-
   @Catch(...exceptions)
   class MongooseValidationFilter implements ExceptionFilter {
-    public catch(exception: T, host: ArgumentsHost) {
+    public catch(exception: T & MongooseError, host: ArgumentsHost) {
       Logger.debug(exception['message'], MongooseValidationFilter.name)
 
       const ctx = host.switchToHttp()
@@ -32,7 +46,7 @@ export function MongooseValidationFilter<T = Type<any> | Abstract<any>>(exceptio
       )
     }
 
-    public getValidationErrors(err: T): Record<string, any> {
+    public getValidationErrors(err: MongooseError): Record<string, any> {
       const validations = {}
 
       if (err instanceof Error.ValidationError) {
