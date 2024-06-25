@@ -29,6 +29,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
     "dayjs": "^1.11.11",
     "deepmerge": "^4.3.1",
     "is-plain-object": "^5.0.0"
