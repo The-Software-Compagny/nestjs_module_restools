@@ -2,9 +2,18 @@ import { BadRequestException, ExecutionContext, Logger, createParamDecorator } f
 import dayjs from 'dayjs'
 import merge from 'deepmerge'
 import { Request } from 'express'
-import { Types } from 'mongoose'
 import { ParsedQs } from 'qs'
 import { isPlainObject } from 'is-plain-object'
+
+let ObjectId: any
+(async () => {
+  try {
+    const mongooseModule = await import('mongoose')
+    ObjectId = mongooseModule.Types.ObjectId
+  } catch (error) {
+    Logger.debug(`Mongoose module not found`, SearchFilterSchema.name)
+  }
+})()
 
 export const FILTER_SYMBOL_EQUAL = ':'
 export const FILTER_SYMBOL_GREATER = '>'
@@ -174,7 +183,7 @@ function internalFilterbyType(
         Logger.verbose(`Invalid filter key ${keyCheck} with strict string: ${JSON.stringify(data)}`, options.loggerType)
         break
       }
-      parsed[key.slice(1)] = options.convertObjectId && Types.ObjectId.isValid(data) ? new Types.ObjectId(data) : `${data}`
+      parsed[key.slice(1)] = options.convertObjectId && ObjectId.isValid(data) ? new ObjectId(data) : `${data}`
       break
     }
 
