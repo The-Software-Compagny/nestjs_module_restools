@@ -1,13 +1,23 @@
-import { CanActivate, ExecutionContext, Injectable, Type, mixin } from '@nestjs/common'
+import { CanActivate, ExecutionContext, Injectable, Logger, Type, mixin } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
-import { AuthGuard as AuthGuardInternal, IAuthGuard } from '@nestjs/passport'
 import { Observable } from 'rxjs'
 import { META_UNPROTECTED } from './public.decorator'
 import { memoize } from '../_utils/memoize.util'
 
-export const AuthGuard: (type?: string | string[]) => Type<IAuthGuard> = memoize(createAuthGuard)
+// import { AuthGuard as AuthGuardInternal, IAuthGuard } from '@nestjs/passport'
+let AuthGuardInternal: (type?: string | string[]) => Type<CanActivate>
+(async () => {
+  try {
+    const passport = await import('@nestjs/passport')
+    AuthGuardInternal = passport.AuthGuard
+  } catch (error) {
+    Logger.debug(`Passport module not found`, AuthGuard.name)
+  }
+})()
 
-function createAuthGuard(type?: string | string[]): Type<IAuthGuard> {
+export const AuthGuard: (type?: string | string[]) => Type<CanActivate> = memoize(createAuthGuard)
+
+function createAuthGuard(type?: string | string[]): Type<CanActivate> {
   const AuthGuard = AuthGuardInternal(Array.isArray(type) ? type : [type])
 
   @Injectable()
@@ -26,5 +36,5 @@ function createAuthGuard(type?: string | string[]): Type<IAuthGuard> {
   }
 
   const guard = mixin(MixinAuthGuard)
-  return guard as Type<IAuthGuard>
+  return guard as Type<CanActivate>
 }
