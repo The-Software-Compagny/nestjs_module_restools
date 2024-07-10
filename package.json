@@ -1,6 +1,6 @@
 {
   "name": "@the-software-compagny/nestjs_module_restools",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Simple tools for NestJS framework and REST APIs",
   "repository": "https://github.com/The-Software-Compagny/nestjs_module_restools.git",
   "author": "tacxou <12997062+tacxou@users.noreply.github.com> (https://github.com/tacxou)",
