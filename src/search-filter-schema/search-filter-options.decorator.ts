@@ -9,6 +9,7 @@ export const DEFAULT_SEARCH_OPTIONS = {
   skipKey: 'skip',
   pageKey: 'page',
   sortKey: 'sort',
+  allowUnlimited: false,
 }
 
 export interface FilterSearchOptions {
@@ -18,6 +19,7 @@ export interface FilterSearchOptions {
   skipKey?: string
   pageKey?: string
   sortKey?: string
+  allowUnlimited?: boolean,
 }
 
 export interface SortOptions {
@@ -53,7 +55,8 @@ export function filterOptions(
   options?: FilterSearchOptions,
 ): FilterOptions {
   options = { ...DEFAULT_SEARCH_OPTIONS, ...options }
-  const limit = parseInt(`${queries[options.limitKey]}`) || options.defaultLimit
+  let limit = parseInt(`${queries[options.limitKey]}`) || options.defaultLimit
+  if (limit === -1 && options.allowUnlimited) limit = undefined
   let skip = parseInt(`${queries[options.skipKey]}`) || 0
 
   if (queries[options.pageKey]) {
