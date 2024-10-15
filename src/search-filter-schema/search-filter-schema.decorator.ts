@@ -40,6 +40,7 @@ export const DEFAULT_SCHEMA_OPTIONS = {
   unsafe: false,
   queryKey: 'filters',
   strict: true,
+  convertNull: true,
   convertObjectId: true,
 }
 
@@ -49,6 +50,7 @@ export interface FilterSchemaOptions {
   unsafe?: boolean
   queryKey?: string
   strict?: boolean
+  convertNull?: boolean
   convertObjectId?: boolean
 }
 
@@ -118,7 +120,7 @@ function internalFilterbyType(
         FILTER_SYMBOL_EQUAL,
       ], options)
       if (Object.keys(valueExclamation).length === 0) break
-      const typeExclamation = Object.keys(valueExclamation[keyCheck])[0]
+      const typeExclamation = Object.keys(valueExclamation[keyCheck] || {})[0]
       if (typeExclamation === '$in') {
         parsed[keyCheck] = { $nin: valueExclamation[keyCheck]['$in'] }
         break
@@ -183,7 +185,18 @@ function internalFilterbyType(
         Logger.verbose(`Invalid filter key ${keyCheck} with strict string: ${JSON.stringify(data)}`, options.loggerType)
         break
       }
-      parsed[key.slice(1)] = options.convertObjectId && ObjectId.isValid(data) ? new ObjectId(data) : `${data}`
+
+      if (options.convertObjectId && ObjectId.isValid(data)) {
+        parsed[key.slice(1)] = new ObjectId(data)
+        break
+      }
+
+      if (options.convertNull && data === 'null') {
+        parsed[key.slice(1)] = null
+        break
+      }
+
+      parsed[key.slice(1)] = `${data}`
       break
     }
 

@@ -102,6 +102,15 @@ describe('search-filter-schema', () => {
     ).toStrictEqual({ age: { $ne: 18 } })
   })
 
+
+  it('test not equal null filter', () => {
+    expect(
+      filterSchema({
+        '!:sync': null,
+      }),
+    ).toStrictEqual({ sync: { $ne: 'null' } })
+  })
+
   it('test not equal int filter', () => {
     expect(
       filterSchema({
