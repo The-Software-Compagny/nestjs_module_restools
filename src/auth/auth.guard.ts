@@ -4,20 +4,26 @@ import { Observable } from 'rxjs'
 import { META_UNPROTECTED } from './public.decorator'
 import { memoize } from '../_utils/memoize.util'
 
-// import { AuthGuard as AuthGuardInternal, IAuthGuard } from '@nestjs/passport'
-let AuthGuardInternal: (type?: string | string[]) => Type<CanActivate>
-(async () => {
-  try {
-    const passport = await import('@nestjs/passport')
-    AuthGuardInternal = passport.AuthGuard
-  } catch (error) {
-    Logger.debug(`Passport module not found`, AuthGuard.name)
-  }
-})()
-
 export const AuthGuard: (type?: string | string[]) => Type<CanActivate> = memoize(createAuthGuard)
 
+let AuthGuardInternal: (type?: string | string[]) => Type<CanActivate>
+try {
+  const passport = require('@nestjs/passport')
+  AuthGuardInternal = passport.AuthGuard
+} catch (error) {
+  Logger.debug(`Passport module not found`, AuthGuard.name)
+}
+
 function createAuthGuard(type?: string | string[]): Type<CanActivate> {
+  if (!AuthGuardInternal) {
+    return class implements CanActivate {
+      public canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+        Logger.error(`Passport module not found`, AuthGuard.name)
+        return false
+      }
+    }
+  }
+
   const AuthGuard = AuthGuardInternal(Array.isArray(type) ? type : [type])
 
   @Injectable()
